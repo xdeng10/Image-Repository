@@ -19,8 +19,9 @@ include("includes/header.php");
 
         <?php
 
+            //Retrieve the information of all artists in the database
             $sql = "SELECT * FROM users;";
-            $result = mysqli_query($conn, $sql);
+            $result = mysqli_query($conn, $sql) or redirect("./error_message_user.php?error=connectdb");
             $resultCheck = mysqli_num_rows($result);
 
             //Makes sure that the connection was established
@@ -30,7 +31,7 @@ include("includes/header.php");
                     $user_id = $row['user_id'];
 
                     $sql1 = "SELECT * FROM image_info WHERE (user_id=$user_id) AND (visibility='public') ORDER BY sales DESC limit 1";
-                    $result1 = mysqli_query($conn, $sql1);
+                    $result1 = mysqli_query($conn, $sql1) or redirect("./error_message_user.php?error=connectdb");
                     $resultCheck1 = mysqli_num_rows($result1);
 
                     if($resultCheck1 > 0){
@@ -49,7 +50,7 @@ include("includes/header.php");
                     }
                 }
             } else {
-                redirect("./error_message_user.php");
+                redirect("./error_message_user.php?error=connectDB");
             }
             ?>
     </div>

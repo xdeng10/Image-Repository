@@ -3,23 +3,25 @@ session_start();
 
 include_once "includes/connectDB.php";
 
-//Find user id vased on username
+//Redirect user to another webpage
 function redirect($url, $statusCode = 303)
 {
     header('Location: ' . $url, true, $statusCode);
     die();
 }
 
+//Read inquired artists username in the URL
 if (isset($_GET['username'])) {
     $username = $_GET['username'];
 } else {
-    redirect("./error_message_user.php?error='imageid");
+    redirect("./error_message_user.php?error=username");
 }
 $page_title = $username;
 
+//Find the user id of the artist
 $user_id;
 $sql = "SELECT * FROM users WHERE username='$username';";
-$result = mysqli_query($conn, $sql) or redirect("./error_message_user.php");
+$result = mysqli_query($conn, $sql) or redirect("./error_message_user.php?connectdb");
 $resultCheck = mysqli_num_rows($result);
 if ($resultCheck > 0) {
     $row = mysqli_fetch_assoc($result);
@@ -48,16 +50,15 @@ include("includes/header.php");
             <div class="gutter-sizer"></div>
             <div class="grid-sizer"></div>
                 <?php
-                //Retrieve all products from the database
                 $image_name;
                 $image_price;
                 $total_sales;
                 $image_inventory;
                 $image_visibility;
 
-
+                //Retrieve all "public" image of the artist
                 $sql = "SELECT * FROM image_info WHERE (visibility='public') AND (user_id=$user_id) ORDER BY sales DESC";
-                $result = mysqli_query($conn, $sql);
+                $result = mysqli_query($conn, $sql) or redirect("./error_message_user.php?error=connectdb");
                 $resultCheck = mysqli_num_rows($result);
 
                 //Makes sure that the connection was established

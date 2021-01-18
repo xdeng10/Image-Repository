@@ -2,13 +2,14 @@
 session_start();
 include_once "includes/connectDB.php";
 
-//Find user id vased on username
+//Redirect user to another webpage
 function redirect($url, $statusCode = 303)
 {
     header('Location: ' . $url, true, $statusCode);
     die();
 }
 
+//If the user is redirected from the sign ou link, reset session.
 if (isset($_GET['status'])) {
     $status = $_GET['status'];
     if($status == 'signout'){
@@ -31,16 +32,15 @@ include("includes/header.php");
             <div class="grid-sizer"></div>
 
             <?php
-            //Retrieve all products from the database
             $image_name;
             $image_price;
             $total_sales;
             $image_inventory;
             $image_visibility;
 
-
+            //Retrieve all "public" images
             $sql = "SELECT * FROM image_info WHERE visibility='public' ORDER BY sales DESC" ;
-            $result = mysqli_query($conn, $sql);
+            $result = mysqli_query($conn, $sql) or redirect("./error_message_user.php?error=connectdb");
             $resultCheck = mysqli_num_rows($result);
 
             //Makes sure that the connection was established

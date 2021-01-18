@@ -2,18 +2,17 @@
 session_start();
 include_once "includes/connectDB.php";
 
-//Find user id vased on username
+//Redirect user to another webpage
 function redirect($url, $statusCode = 303)
 {
     header('Location: ' . $url, true, $statusCode);
     die();
 }
 
+//Check if username and user_id of the user is available
 if(empty($_SESSION["username"]) || empty($_SESSION["user_id"])){
     redirect("./login.php", $statusCode = 303);
 }
-
-
 $username = $_SESSION["username"];
 $user_id = $_SESSION["user_id"];
 
@@ -47,19 +46,18 @@ include("includes/header.php");
                 </thead>
                 <tbody>
                     <?php
-                    //Retrieve all products from the database
                     $image_name;
                     $image_price;
                     $total_sales;
                     $image_inventory;
                     $image_visibility;
 
-
+                    //Retrieve all images of the user.
                     $sql = "SELECT * FROM image_info where user_id=$user_id";
-                    $result = mysqli_query($conn, $sql);
+                    $result = mysqli_query($conn, $sql) or redirect("./error_message_user.php?error=connectdb");
                     $resultCheck = mysqli_num_rows($result);
 
-                    //Makes sure that the connection was established
+                    //Makes sure that the connection was established and that there are images
                     if ($resultCheck > 0) {
                         while ($row = mysqli_fetch_assoc($result)) {
                             $image_id = $row['image_id'];
@@ -90,7 +88,7 @@ include("includes/header.php");
 
 
 
-<!-- Popup window for creating new page -->
+<!-- Popup window for creating new image -->
 <div class="popup" id="popup-1">
     <div class="overlay"></div>
     <div class="content" id="popup_box">

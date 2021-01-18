@@ -2,12 +2,14 @@
 session_start();
 include_once "includes/connectDB.php";
 
+//Redirect user to another webpage
 function redirect($url, $statusCode = 303)
 {
     header('Location: ' . $url, true, $statusCode);
     die();
 }
 
+//Check if username and user_id of the user is available
 if(empty($_SESSION["username"]) || empty($_SESSION["user_id"])){
     redirect("./login.php", $statusCode = 303);
 }
@@ -15,13 +17,13 @@ if(empty($_SESSION["username"]) || empty($_SESSION["user_id"])){
 $username = $_SESSION["username"];
 $user_id = $_SESSION["user_id"];
 
+//Retrieve image id from url
 if (isset($_GET['imageid'])) {
     $image_id = $_GET['imageid'];
 } else {
     redirect("./error_message_user.php?error='imageid");
 }
 
-//Retrieve all products from the database
 $image_name;
 $image_price;
 $image_price_discount;
@@ -32,7 +34,7 @@ $image_format;
 $image_size;
 $image_visibility;
 
-
+//Retrieve image information while making sure that only authorized user can see.
 $sql = "SELECT * FROM image_info where (image_id=$image_id) AND (user_id=$user_id);";
 $result = mysqli_query($conn, $sql) or redirect("./error_message_user.php?error=connectdb");
 $resultCheck = mysqli_num_rows($result);
@@ -53,8 +55,6 @@ if ($resultCheck > 0) {
 } else {
     redirect("./error_message_user.php?error=readdb");
 }
-
-
 
 $page_title = $image_name;
 $username = "xdeng10";

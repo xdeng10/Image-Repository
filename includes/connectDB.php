@@ -6,6 +6,8 @@ $db_username="root";
 $db_password="";
 $db_name="shopify2021_imagerepo";
 */
+
+//Remote MySQL
 $db_servername="lfmerukkeiac5y5w.cbetxkdyhwsb.us-east-1.rds.amazonaws.com";
 $db_username="c8dc8h2u94iz4o29";
 $db_password="gq48kizwlxljqfmf";

@@ -2,19 +2,20 @@
 session_start();
 include_once "includes/connectDB.php";
 
+//Redirect user to another webpage
 function redirect($url, $statusCode = 303)
 {
     header('Location: ' . $url, true, $statusCode);
     die();
 }
 
+//Retrieve image id from url
 if (isset($_GET['imageid'])) {
     $image_id = $_GET['imageid'];
 } else {
     redirect("./error_message_user.php?error='imageid");
 }
 
-//Retrieve all products from the database
 $image_name;
 $image_price;
 $image_price_discount;
@@ -25,7 +26,7 @@ $image_format;
 $image_size;
 $username;
 
-
+//Retrieve information of the image
 $sql = "SELECT * FROM image_info where image_id=$image_id;";
 $result = mysqli_query($conn, $sql) or redirect("./error_message_user.php?error=connectdb");
 $resultCheck = mysqli_num_rows($result);

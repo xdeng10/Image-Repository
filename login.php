@@ -5,13 +5,14 @@ include_once "includes/connectDB.php";
 $page_title = "Login";
 include("includes/header.php");
 
-//Find user id vased on username
+//Redirect user to another webpage
 function redirect($url, $statusCode = 303)
 {
     header('Location: ' . $url, true, $statusCode);
     die();
 }
 
+//Check if an user is already signed in. If yes, redirect to image_collection
 if(!empty($_SESSION["username"]) && !empty($_SESSION["user_id"])){
     redirect("./image_collection.php", $statusCode = 303);
 }
