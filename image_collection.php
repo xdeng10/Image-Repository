@@ -109,7 +109,7 @@ include("includes/header.php");
             </div>
             <div class="col-md-9">
                 <div class="form-group">
-                    <input class="form-control" type="text" name="imageprice" id="imageprice" placeholder="Price" pattern="^[0-9]{1,}[.]{0,1}[0-9]{0,2}$" title="Valid monetary values only. (E.g. 13.10)" required>
+                    <input class="form-control" type="text" name="imageprice" id="imageprice" placeholder="Example: 4.01 " pattern="^[0-9]{1,}[.]{0,1}[0-9]{0,2}$" title="Valid monetary values only. (E.g. 13.10)" required>
                 </div>
             </div>
 
@@ -127,7 +127,7 @@ include("includes/header.php");
             </div>
             <div class="col-md-9">
                 <div class="form-group">
-                    <input class="form-control" type="text" name="imageInventory" id="imageInventory" placeholder="Inventory" pattern="[0-9]{1,}" title="Integers Only" required>
+                    <input class="form-control" type="text" name="imageInventory" id="imageInventory" placeholder="Example: 100" pattern="[0-9]{1,}" title="Integers Only" required>
                 </div>
             </div>
 
