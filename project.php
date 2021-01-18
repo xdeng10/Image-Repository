@@ -1,4 +1,5 @@
 <?php
+session_start();
 include_once "includes/connectDB.php";
 
 function redirect($url, $statusCode = 303)
@@ -22,6 +23,7 @@ $image_num_sold;
 $image_inventory;
 $image_format;
 $image_size;
+$username;
 
 
 $sql = "SELECT * FROM image_info where image_id=$image_id;";
@@ -30,18 +32,32 @@ $resultCheck = mysqli_num_rows($result);
 
 //Makes sure that the connection was established
 if ($resultCheck > 0) {
-    while ($row = mysqli_fetch_assoc($result)) {
-        $image_name = $row['image_name'];
-        $image_price = $row['price'];
-        $image_discount = $row['discount'];
-        $image_desc = $row['description'];
-        $image_format = $row['format'];
-        $image_size = $row['size'];
-        $image_location = $row['location'];
+    $row = mysqli_fetch_assoc($result);
+    $image_name = $row['image_name'];
+    $image_price = $row['price'];
+    $image_discount = $row['discount'];
+    $image_desc = $row['description'];
+    $image_format = $row['format'];
+    $image_size = $row['size'];
+    $image_location = $row['location'];
+    $user_id = $row['user_id'];
+
+    $sql1 = "SELECT * FROM users where user_id=$user_id;";
+    $result1 = mysqli_query($conn, $sql1) or redirect("./error_message_user.php?error=connectdb");
+    $resultCheck1 = mysqli_num_rows($result1);
+
+    //Makes sure that the connection was established
+    if ($resultCheck1 > 0) {
+        $row1 = mysqli_fetch_assoc($result1);
+        $username = $row1['username'];
+    } else {
+        redirect("./error_message_user.php?error=readdb");
     }
 } else {
     redirect("./error_message_user.php?error=readdb");
 }
+
+
 
 
 
@@ -75,6 +91,9 @@ include("includes/header.php");
             <p style='font-size: large'>
                 <strong>Format:</strong> <?php echo $image_format ?><br>
                 <strong>Size:</strong> <?php echo $image_size ?><br>
+            </p>
+            <p style='font-size: large'>
+                <strong>Artist: </strong><?php echo "<a href='./artist_profile.php?username=$username'>$username</a>" ?><br>
             </p>
             <br>
             <button type="submit" class="btn btn-primary" style="outline:none" disabled>Purchase</button>

@@ -1,5 +1,25 @@
 <?php
+session_start();
+echo "It works";
 include_once "includes/connectDB.php";
+
+//Find user id vased on username
+function redirect($url, $statusCode = 303)
+{
+    header('Location: ' . $url, true, $statusCode);
+    die();
+}
+
+if (isset($_GET['status'])) {
+    $status = $_GET['status'];
+    if($status == 'signout'){
+        session_unset();
+        session_destroy();
+        redirect("./index.php");
+    }
+} else {
+}
+
 $page_title = "Discovery";
 include("includes/header.php");
 ?>

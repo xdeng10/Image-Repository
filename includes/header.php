@@ -1,3 +1,10 @@
+<?php
+$loggedin = false;
+if(!empty($_SESSION["username"]) && !empty($_SESSION["user_id"])){
+    $loggedin = true;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -51,10 +58,15 @@
                 </ul>
 
                 <nav class="nav-footer">
-                    <a href="./image_collection.php" title="">My Images</a><br>
+                    <?php
+                    if($loggedin){
+                        echo "<a href='./image_collection.php' title=''>My Images</a><br>";
+                        echo "<a href='./index.php?status=signout' title=''>Sign out</a><br><br>";
+                    }else{
+                        echo "<a href='./login.php' title=''>Login/Sign Up</a><br><br>";
+                    }
+                    ?>
 
-                    <a href="./login.php" title="">Login</a><br>
-                    <a href="./index.php" title="">Sign out</a><br>
                     <p class="nav-footer-social-buttons">
                         <a class="fa-icon" href="https://www.instagram.com/" title="">
                             <i class="fa fa-instagram"></i>

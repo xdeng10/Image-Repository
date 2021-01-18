@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 include_once "includes/connectDB.php";
 
 $page_title = "Artists";
@@ -27,7 +29,7 @@ include("includes/header.php");
                     $username = $row['username'];
                     $user_id = $row['user_id'];
 
-                    $sql1 = "SELECT * FROM image_info WHERE user_id=$user_id ORDER BY sales DESC limit 1";
+                    $sql1 = "SELECT * FROM image_info WHERE (user_id=$user_id) AND (visibility='public') ORDER BY sales DESC limit 1";
                     $result1 = mysqli_query($conn, $sql1);
                     $resultCheck1 = mysqli_num_rows($result1);
 

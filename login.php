@@ -1,4 +1,5 @@
 <?php
+session_start();
 include_once "includes/connectDB.php";
 
 $page_title = "Login";
@@ -11,56 +12,61 @@ function redirect($url, $statusCode = 303)
     die();
 }
 
+if(!empty($_SESSION["username"]) && !empty($_SESSION["user_id"])){
+    redirect("./image_collection.php", $statusCode = 303);
+}
+
 //Verify login information
 $error_message = "";
+$username;
+$user_id;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($_POST["username"]) && !empty($_POST["email"])) {
 
-    $sql = "SELECT * FROM users;";
-    $result = mysqli_query($conn, $sql);
-    $resultCheck = mysqli_num_rows($result);        
+        $username = mysqli_real_escape_string($conn,$_POST['username']);
+        $email = mysqli_real_escape_string($conn,$_POST['email']);
 
 
-        redirect("./image_collection.php", $statusCode = 303);
-    } else {
-        $error_message = "The username and/or the email does not match the information in our database.";
+        $sql = "SELECT * FROM users WHERE username='$username';";
+        $result = mysqli_query($conn, $sql);
+        $resultCheck = mysqli_num_rows($result);
+
+        
+        //If username match with one in the database
+        if ($resultCheck > 0) {
+            $row = mysqli_fetch_assoc($result);
+            $email_retrieved = $row['email'];
+
+            if($email_retrieved == $email){
+                $user_id = $row['user_id'];
+                $_SESSION["username"]=$username;
+                $_SESSION["user_id"]=$user_id;
+                redirect("./image_collection.php?1", $statusCode = 303);
+            }
+        }else{
+            $sql1 = "SELECT * FROM users WHERE email='$email';";
+            $result1 = mysqli_query($conn, $sql1);
+            $resultCheck1 = mysqli_num_rows($result1); 
+
+            //If email matches with one in the database
+            if ($resultCheck1 > 0) {
+                $login = false;
+            }else{
+                //If username and email is not in the database, sign up the information
+                $sql2 = "INSERT INTO users (username, email) 
+                            VALUES('$username','$email');";
+                if (!mysqli_query($conn, $sql2)) {
+                    redirect("./error_message_user.php?error=insertion");
+                }
+                $user_id = mysqli_insert_id($conn); //Retrieve id of product that was created
+                $_SESSION["username"]=$username;
+                $_SESSION["user_id"]=$user_id;
+                redirect("./image_collection.php?1", $statusCode = 303);
+            } 
+        } 
     }
+    $error_message = "The username and/or the email does not match the information in our database.";
 }
-
-/*
-$sql = "SELECT * FROM users;";
-$result = mysqli_query($conn, $sql);
-$resultCheck = mysqli_num_rows($result);
-
-//Makes sure that the connection was established
-if ($resultCheck > 0) {
-    while ($row = mysqli_fetch_assoc($result)) {
-        $username = $row['username'];
-        $user_id = $row['user_id'];
-
-        $sql1 = "SELECT * FROM image_info WHERE user_id=$user_id ORDER BY sales DESC limit 1";
-        $result1 = mysqli_query($conn, $sql1);
-        $resultCheck1 = mysqli_num_rows($result1);
-
-        if($resultCheck1 > 0){
-            $row1 = mysqli_fetch_assoc($result1);
-            $image_location = $row1['location'];
-
-            $str = <<<END
-            <div class="col-xs-12 col-md-4 section-container-spacer">
-            <img class="img-responsive" alt="" src="$image_location">
-            <h2>$username</h2>
-            <p></p>
-            <a href="./artist_profile.php?username=$username" class="btn btn-primary" title="">Visit</a>
-            </div>
-            END;
-            print $str;
-        }
-    }
-} else {
-    redirect("./error_message_user.php");
-}
-*/
 
 ?>
 

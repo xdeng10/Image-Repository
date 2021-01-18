@@ -1,7 +1,6 @@
 <?php
+session_start();
 include_once "includes/connectDB.php";
-$page_title = "Images";
-$username = 'xdeng10';
 
 //Find user id vased on username
 function redirect($url, $statusCode = 303)
@@ -10,16 +9,15 @@ function redirect($url, $statusCode = 303)
     die();
 }
 
-$user_id;
-$sql = "SELECT * FROM users WHERE username='$username';";
-$result = mysqli_query($conn, $sql) or redirect("./error_message_user.php");
-$resultCheck = mysqli_num_rows($result);
-if ($resultCheck > 0) {
-    $row = mysqli_fetch_assoc($result);
-    $user_id = $row['user_id'];
-} else {
-    redirect("./error_message_user.php");
+if(empty($_SESSION["username"]) || empty($_SESSION["user_id"])){
+    redirect("./login.php", $statusCode = 303);
 }
+
+
+$username = $_SESSION["username"];
+$user_id = $_SESSION["user_id"];
+
+$page_title = $username . "'s Images";
 
 include("includes/header.php");
 ?>
@@ -80,8 +78,6 @@ include("includes/header.php");
                             print("<td>$image_inventory </td>");
                             print("<td>$image_visibility </td></tr>");
                         }
-                    } else {
-                        redirect("./error_message_user.php");
                     }
                     ?>
                 </tbody>
@@ -107,7 +103,7 @@ include("includes/header.php");
             </div>
             <div class="col-md-9">
                 <div class="form-group">
-                    <input class="form-control" type="text" name="imagename" id="imagename" placeholder="Image Name" >
+                    <input class="form-control" type="text" name="imagename" id="imagename" placeholder="Image Name" required>
                 </div>
             </div>
             <div class="col-md-3">
@@ -115,7 +111,7 @@ include("includes/header.php");
             </div>
             <div class="col-md-9">
                 <div class="form-group">
-                    <input class="form-control" type="text" name="imageprice" id="imageprice" placeholder="Price" pattern="^[0-9]{1,}.[0-9]{2}$" title="Valid monetary values only. (E.g. 13.10)">
+                    <input class="form-control" type="text" name="imageprice" id="imageprice" placeholder="Price" pattern="^[0-9]{1,}[.]{0,1}[0-9]{0,2}$" title="Valid monetary values only. (E.g. 13.10)" required>
                 </div>
             </div>
 
@@ -124,7 +120,7 @@ include("includes/header.php");
             </div>
             <div class="col-md-9">
                 <div class="form-group">
-                    <textarea class="form-control" rows="3" name="imageDesc" id="imageDesc" placeholder="Image Description" ></textarea>
+                    <textarea class="form-control" rows="3" name="imageDesc" id="imageDesc" placeholder="Image Description" required></textarea>
                 </div>
             </div>
             <div class="col-md-3">
@@ -133,7 +129,7 @@ include("includes/header.php");
             </div>
             <div class="col-md-9">
                 <div class="form-group">
-                    <input class="form-control" type="text" name="imageInventory" id="imageInventory" placeholder="Inventory" pattern="[0-9]{1,}" title="Integers Only" >
+                    <input class="form-control" type="text" name="imageInventory" id="imageInventory" placeholder="Inventory" pattern="[0-9]{1,}" title="Integers Only" required>
                 </div>
             </div>
 

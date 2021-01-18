@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 $page_title = "Please Login";
 include("includes/header.php");
 ?>

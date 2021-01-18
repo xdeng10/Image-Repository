@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 include_once "includes/connectDB.php";
 
 //Find user id vased on username

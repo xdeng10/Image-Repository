@@ -1,4 +1,5 @@
 <?php
+session_start();
 include_once "includes/connectDB.php";
 
 function redirect($url, $statusCode = 303)
@@ -6,6 +7,13 @@ function redirect($url, $statusCode = 303)
     header('Location: ' . $url, true, $statusCode);
     die();
 }
+
+if(empty($_SESSION["username"]) || empty($_SESSION["user_id"])){
+    redirect("./login.php", $statusCode = 303);
+}
+
+$username = $_SESSION["username"];
+$user_id = $_SESSION["user_id"];
 
 if (isset($_GET['imageid'])) {
     $image_id = $_GET['imageid'];
@@ -25,11 +33,10 @@ $image_size;
 $image_visibility;
 
 
-$sql = "SELECT * FROM image_info where image_id=$image_id;";
+$sql = "SELECT * FROM image_info where (image_id=$image_id) AND (user_id=$user_id);";
 $result = mysqli_query($conn, $sql) or redirect("./error_message_user.php?error=connectdb");
 $resultCheck = mysqli_num_rows($result);
 
-//Makes sure that the connection was established
 if ($resultCheck > 0) {
     while ($row = mysqli_fetch_assoc($result)) {
         $image_name = $row['image_name'];
@@ -112,7 +119,7 @@ include("includes/header.php");
             </div>
             <div class="col-md-9">
                 <div class="form-group">
-                    <input class="form-control" type="text" name="imageprice" id="imageprice" value="<?php echo $image_price ?>" required>
+                    <input class="form-control" type="text" name="imageprice" id="imageprice" pattern="[0-9]{1,}[.]{0,1}[0-9]{0,2}" title="Valid monetary values only. (E.g. 13.10)" value="<?php echo $image_price ?>" required>
                 </div>
             </div>
             <div class="col-md-3">
@@ -135,7 +142,7 @@ include("includes/header.php");
             </div>
             <div class="col-md-9">
                 <div class="form-group">
-                    <textarea class="form-control" rows="3" name="imageDesc" id="imageDesc" required><?php echo $image_desc ?></textarea>
+                    <textarea class="form-control" rows="3" name="imageDesc" id="imageDesc" pattern="[0-9]{1,}" title="Integers Only" required><?php echo $image_desc ?></textarea>
                 </div>
             </div>
             <div class="col-md-3">

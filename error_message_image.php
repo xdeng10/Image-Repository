@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 $page_title = "Error";
 include("includes/header.php");
 ?>
