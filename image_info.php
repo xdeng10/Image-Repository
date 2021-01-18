@@ -81,7 +81,7 @@ include("includes/header.php");
                 }
                 ?>
             </p>
-            <p style='font-size: large'><strong>Description:</strong> <?php echo $image_desc ?></p>
+            <p style='font-size: large; white-space: pre-line'><strong>Description:</strong> <?php echo $image_desc ?></p>
             <p style='font-size: large'>
                 <strong>Sales:</strong> <?php echo $total_sales ?><br>
                 <strong>Inventory:</strong> <?php echo $image_inventory ?>

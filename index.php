@@ -1,6 +1,5 @@
 <?php
 session_start();
-echo "It works";
 include_once "includes/connectDB.php";
 
 //Find user id vased on username
@@ -53,7 +52,7 @@ include("includes/header.php");
                     $image_location = $row['location'];
 
                     $str = <<<END
-                    <div class="grid-item">
+                    <div class="grid-item" style="white-space: pre-line">
                     <img class="img-responsive" alt="" src="$image_location">
                     <a href="./project.php?imageid=$image_id" class="project-description">
                     <div class="project-text-holder">

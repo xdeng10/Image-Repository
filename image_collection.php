@@ -116,7 +116,7 @@ include("includes/header.php");
             </div>
 
             <div class="col-md-3">
-                <p style="text-align: left; font-size: large"><strong>Description: </strong></p>
+                <p style="text-align: left; font-size: large; white-space: pre-line"><strong>Description: </strong></p>
             </div>
             <div class="col-md-9">
                 <div class="form-group">
