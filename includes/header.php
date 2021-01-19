@@ -79,6 +79,7 @@ if(!empty($_SESSION["username"]) && !empty($_SESSION["user_id"])){
                         </a>
                     </p>
                     <p>Image Repository | xdeng10</p>
+                    <p>© Design <a href="http://www.mashup-template.com/" title="Create website with free html template">Mashup Template</a>/<a href="https://unsplash.com/" title="Beautiful Free Images">Unsplash</a></p>
                 </nav>
             </div>
         </nav>
